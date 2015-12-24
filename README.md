@@ -2,25 +2,15 @@ karma-phantomjs2-launcher
 =========================
 
 > Launcher for [PhantomJS 2]. As for now it is temporary solution, until default karma-phantomjs-launcher is not support of the PhantomJS 2. PhantomJS 2 is not stable [PhantomJS-2](https://github.com/ariya/phantomjs/wiki/PhantomJS-2) Loading PhantomJS from custom ULR can be done by setting the `PHANTOMJS2_DOWNLOAD_URL` environment variable.
->
-> Installation
-> ------------
 
-The easiest way is to keep `karma-phantomjs-launcher` as a devDependency in your `package.json`.
+Installation
+------------
 
-```json
-{
-  "devDependencies": {
-    "karma": "~0.10",
-    "karma-phantomjs2-launcher": "~0.1"
-  }
-}
-```
-
-You can simple do it by:
+The easiest way is to keep `karma-phantomjs2-launcher` as a devDependency in your `package.json`,
+by running
 
 ```bash
-npm install karma-phantomjs2-launcher --save-dev
+$ npm install --save-dev karma-phantomjs2-launcher
 ```
 
 Configuration
@@ -51,8 +41,8 @@ module.exports = function(config) {
       // Have phantomjs exit if a ResourceError is encountered (useful if karma exits without killing phantom)
       exitOnResourceError: true
     }
-  });
-};
+  })
+}
 ```
 
 The `options` attribute allows you to initialize properties on
@@ -70,17 +60,17 @@ options: {
 is equivalent to:
 
 ```js
-var webPage = require('webpage');
-var page = webPage.create();
+var webPage = require('webpage')
+var page = webPage.create()
 
-page.windowName = 'my-window';
-page.settings.webSecurityEnabled = false;
+page.windowName = 'my-window'
+page.settings.webSecurityEnabled = false
 ```
 
 You can pass list of browsers as a CLI argument too:
 
 ```bash
-karma start --browsers PhantomJS2_custom
+$ karma start --browsers PhantomJS2_custom
 ```
 
 ---
