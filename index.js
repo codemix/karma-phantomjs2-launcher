@@ -29,7 +29,7 @@ var PhantomJSBrowser = function (baseBrowserDecorator, config, args, logger) {
   baseBrowserDecorator(this)
 
   var options = args && args.options || config && config.options || {}
-  var flags = args && args.flags || config && config.flags || []
+  var providedFlags = args && args.flags || config && config.flags || []
 
   this._start = function (url) {
     // create the js file that will open karma
@@ -48,11 +48,6 @@ var PhantomJSBrowser = function (baseBrowserDecorator, config, args, logger) {
       }
     })
 
-    if (args.debug) {
-      flags = flags.concat('--remote-debugger-port=9000')
-      flags = flags.concat('--remote-debugger-autorun=yes')
-    }
-
     var file = fs.readFileSync(path.join(__dirname, 'capture.template.js'))
 
     var compiled = _.template(file.toString())
@@ -66,10 +61,23 @@ var PhantomJSBrowser = function (baseBrowserDecorator, config, args, logger) {
 
     fs.writeFileSync(captureFile, captureCode)
 
-    flags = flags.concat(captureFile)
+    // PhantomJS takes its script file as the first cmd-line argument
+    var flags = [captureFile].concat(providedFlags)
+    if (args.debug) {
+      flags.push('--remote-debugger-port=9000')
+      flags.push('--remote-debugger-autorun=yes')
+    }
 
     // and start phantomjs
     this._execCommand(this._getCommand(), flags)
+
+    this._process.stderr.on('data', function (data) {
+      log.error('' + data)
+    })
+
+    this._process.stdout.on('data', function (data) {
+      log.debug('' + data)
+    })
 
     if (args.debug) {
       log.info('ACTION REQUIRED:')
